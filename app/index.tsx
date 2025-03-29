@@ -2,7 +2,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import PlayScreen from "./screens/PlayScreen";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, SafeAreaView, StyleSheet } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -25,7 +25,9 @@ export default function App() {
 
   return (
     <ImageBackground source={require("./assets/images/bg41.png")} resizeMode="cover" style={[StyleSheet.absoluteFill]}>
-      <PlayScreen />
+      <SafeAreaView>
+        <PlayScreen />
+      </SafeAreaView>
     </ImageBackground>
   );
 }
