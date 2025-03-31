@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
+// A sécuriser évidemment ... !!!
 const API_KEY_PEXEL = "hTjwv4ukgnoZwOCPRYsL4dxwYt4qEQIosvUyYsqyrkB4e5SGTMZAIW3v";
-const MAX_SECURE_RETRY = 3;
 
-const usePexels = (word: string, fetchWord: () => void) => {
+const usePexels = (word: string) => {
 
   const [images, setImages] = useState<string[]>(["", "", "", ""]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [retry, setRetry] = useState<number>(0);
 
   const fetchImages = useCallback(async () => {
     setLoading(true);
@@ -21,15 +20,10 @@ const usePexels = (word: string, fetchWord: () => void) => {
       if(!response.ok) { throw new Error('Erreur lors du chargement des images') }
   
       const data = await response.json();
-      const images = data.photos.map((photo: any) => photo.src.medium);
-      console.log(images);
-      if(images.length < 4 && retry < MAX_SECURE_RETRY) { 
-        console.log(images.length < 4)
-        setRetry(prev => prev + 1);
-        fetchWord();
-        return
-      }
-      setImages(images);
+      const imagesList = data.photos.map((photo: any) => photo.src.medium);
+
+      setImages(imagesList);
+
     } catch (error: any) {
       setError(error.message || 'Une erreur est survenue');
     } finally {

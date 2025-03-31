@@ -25,7 +25,6 @@ const useRando = () => {
     } finally {
       setLoading(false);
     }
-
   }, []);
 
   useEffect(() => {

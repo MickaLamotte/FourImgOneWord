@@ -5,7 +5,7 @@
 
 const Colors = {
   cardImage: {
-    background: '#4B4E5530',
+    background: '#D7D7D730',
   },
   letterToPick: {
     letter: '#000000',
@@ -18,6 +18,7 @@ const Colors = {
     background: '#141922',
     border: '#101010',
     blurDefault: '#4A6AB2',
+    background3D: '#4A6AB250',
     success: '#B0D800',
     fail: '#FF0000',
   },

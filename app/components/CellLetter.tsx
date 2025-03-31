@@ -1,8 +1,6 @@
-import * as Haptics from 'expo-haptics';
-import { View, Text, Dimensions, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Size } from '../constants/Size';
 import { HapticFeedback } from './HapticTab';
-import { useState } from 'react';
 import { Letter } from '../screens/PlayScreen';
 import Colors from '../constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -21,14 +19,14 @@ export function CellLetter(props: CellLetterProps) {
       {letter.used ? (
         <View style={[styles.container, styles.disable]} />
       ) : (
-        <View style={styles.container}>
-          <LinearGradient colors={[Colors.letterToPick.background, Colors.letterToPick.background2]} style={styles.gradient}>
+        <View style={[styles.container]}>
+          <LinearGradient colors={[Colors.letterToPick.background, Colors.letterToPick.background2]} style={[styles.gradient]}>
             <HapticFeedback style={styles.pressable} onPress={onPress}>
               <Text style={styles.letter}>{letter.letter}</Text>
             </HapticFeedback>
           </LinearGradient>
         </View>
-      )}
+      )} 
     </>
   );
 }

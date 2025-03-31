@@ -17,9 +17,11 @@ export function CellResponse(props: CellResponseProps) {
   const { letter, onPress = () => {}, color } = props;
   
   return (
-    <HapticFeedback style={styles.cell} onPress={onPress}>
-      {letter && <Text style={[styles.letter, {color: color}]}>{letter.letter}</Text>}
-    </HapticFeedback>
+    <View style={styles.container}>
+      <HapticFeedback style={styles.cell} onPress={onPress}>
+        {letter && <Text style={[styles.letter, {color: color}]}>{letter.letter}</Text>}
+      </HapticFeedback>
+    </View>
   );
 }
 
@@ -28,12 +30,16 @@ const styles = StyleSheet.create({
     width: 50, 
     height: 50, 
     backgroundColor: Colors.response.background, 
-    marginHorizontal: 2, 
     justifyContent: 'center', 
     alignItems: 'center', 
     borderRadius: 8,
-    borderColor: Colors.response.border,
-    borderWidth: 2,
+  },
+  container: {
+    width: 50, 
+    height: 52,
+    borderRadius: 8,
+    backgroundColor: Colors.response.background3D, 
+    marginHorizontal: 2, 
   },
   letter: {
     fontSize: 36, 

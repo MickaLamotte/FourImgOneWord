@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import usePexels from "../services/usePexels";
 import useRando from "../services/useRando";
 import Colors from "../constants/Colors";
+import { Size } from "../constants/Size";
 
 export type Letter = {
   index: number;
@@ -14,13 +15,18 @@ export type Letter = {
   used: boolean;
 }
 
+const MAX_SECURE_RETRY = 3;
+
 export default function PlayScreen() {
 
   const { word = '', loading: loadingWord, error: errorWord, fetchWord } = useRando();
-  const { images, loading, error } = usePexels(word, fetchWord);
+  const { images, loading: loadingImage, error } = usePexels(word);
   const [ reponse, setReponse ]= useState<(Letter | undefined)[]>([]);
+  const [ loading, setLoading ]= useState<boolean>(false);
 
   const [ propositionLetter, setPropositionLetter ] = useState<Letter[]>([]);
+
+  var retryAPI: number = 0
 
   useEffect(() => {
     const randomLetters = getRandomLetters(12 - word.length);
@@ -37,6 +43,16 @@ export default function PlayScreen() {
     checkForWin()
   }, [reponse])
 
+  useEffect(() => {
+    if(images.length < 4 && retryAPI < MAX_SECURE_RETRY) {
+      retryAPI++
+      fetchWord()
+    } else {
+      retryAPI = 0;
+      setLoading(false);
+    }
+  }, [images])
+
   function getRandomLetters(length: number = 12): string[] {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return Array.from({ length }, () => letters[Math.floor(Math.random() * letters.length)]);
@@ -44,6 +60,7 @@ export default function PlayScreen() {
 
   function resetGame() {
     setReponse([]);
+    setLoading(true)
     fetchWord();
   }
 
@@ -102,10 +119,8 @@ export default function PlayScreen() {
   return (
       <View style={styles.screen}>
         <View style={styles.gridImage}>
-          {loading ? 
-            <ActivityIndicator size="large" color="#FFFFFF" /> 
-            : images.map((image, index) => (
-              <CardImage key={index} image={image}/>
+          {images.map((image, index) => (
+              <CardImage key={index} image={image} loading={loading} />
             ))
           }
         </View>
@@ -121,8 +136,8 @@ export default function PlayScreen() {
           ))}
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', flex: 6}}>
+        <View style={styles.row}>
+            <View style={styles.gridLetterToPick}>
               {propositionLetter.map((letter, index) => (
                 <CellLetter key={index} letter={letter} onPress={() => addLetterToReponse(letter, index)}/>
               ))}
@@ -145,6 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    height: (Size.image * 2) + 20
   },
   containerAnswer: {
     flexDirection: 'row',
@@ -155,5 +171,14 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
+    elevation: 3
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  gridLetterToPick: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    flex: 6
   }
 })
