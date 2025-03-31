@@ -1,4 +1,4 @@
-import { Button, Dimensions, Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { CardImage } from "../components/CardImage";
 import { CellResponse } from "../components/CellResponse";
 import { CellLetter } from "../components/CellLetter";
@@ -62,6 +62,12 @@ export default function PlayScreen() {
     setReponse([]);
     setLoading(true)
     fetchWord();
+  }
+
+  function resetResponse() {
+    reponse.forEach((letter, index) => {
+      removeLetterToReponse(index, letter);
+    });
   }
 
   const addLetterToReponse = useCallback((letter: Letter, index: number) => {
@@ -142,7 +148,7 @@ export default function PlayScreen() {
                 <CellLetter key={index} letter={letter} onPress={() => addLetterToReponse(letter, index)}/>
               ))}
             </View>
-            <ButtonValidation onPress={() => {resetGame()}} />
+            <ButtonValidation onPress={() => {resetResponse()}} />
         </View>
       </View>
   );

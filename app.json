@@ -4,7 +4,7 @@
     "slug": "FourImgOneWord",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/images/icon.png",
+    "icon": "./app/assets/images/bg41.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

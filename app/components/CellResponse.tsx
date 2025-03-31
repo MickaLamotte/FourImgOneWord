@@ -1,7 +1,4 @@
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { PlatformPressable } from '@react-navigation/elements';
-import * as Haptics from 'expo-haptics';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { HapticFeedback } from './HapticTab';
 import { Letter } from '../screens/PlayScreen';
 import Colors from '../constants/Colors';
