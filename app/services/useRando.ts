@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
-export function useRando() {
+const useRando = () => {
 
   const [word, setWord] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,3 +35,5 @@ export function useRando() {
   return { word, loading, error, fetchWord };
 
 }
+
+export default useRando;

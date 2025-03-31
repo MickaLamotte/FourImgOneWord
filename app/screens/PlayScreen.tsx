@@ -3,9 +3,10 @@ import { CardImage } from "../components/CardImage";
 import { CellResponse } from "../components/CellResponse";
 import { CellLetter } from "../components/CellLetter";
 import { ButtonValidation } from "../components/ButtonValidation";
-import { useEffect, useState } from "react";
-import { usePexels } from "../services/usePexels";
-import { useRando } from "../services/useRando";
+import { useCallback, useEffect, useState } from "react";
+import usePexels from "../services/usePexels";
+import useRando from "../services/useRando";
+import Colors from "../constants/Colors";
 
 export type Letter = {
   index: number;
@@ -16,7 +17,7 @@ export type Letter = {
 export default function PlayScreen() {
 
   const { word = '', loading: loadingWord, error: errorWord, fetchWord } = useRando();
-  const { images, loading, error, fetchImages } = usePexels(word);
+  const { images, loading, error } = usePexels(word, fetchWord);
   const [ reponse, setReponse ]= useState<(Letter | undefined)[]>([]);
 
   const [ propositionLetter, setPropositionLetter ] = useState<Letter[]>([]);
@@ -32,6 +33,10 @@ export default function PlayScreen() {
     }))
   }, [word]);
 
+  useEffect(() => {
+    checkForWin()
+  }, [reponse])
+
   function getRandomLetters(length: number = 12): string[] {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return Array.from({ length }, () => letters[Math.floor(Math.random() * letters.length)]);
@@ -42,7 +47,7 @@ export default function PlayScreen() {
     fetchWord();
   }
 
-  function addLetterToReponse(letter: Letter, index: number) {
+  const addLetterToReponse = useCallback((letter: Letter, index: number) => {
     if(reponse.length === word.length && !reponse.includes(undefined)) {return}
     setPropositionLetter(prevItems => {
       const updatedItems = [...prevItems];
@@ -61,9 +66,9 @@ export default function PlayScreen() {
       }
       i++;
     }
-  }
+  }, [reponse, word])
 
-  function removeLetterToReponse(index: number, letter: Letter | undefined) {
+  const removeLetterToReponse = useCallback((index: number, letter: Letter | undefined) => {
     if(letter === undefined) return
     setPropositionLetter(prevItems => {
       const updatedItems = [...prevItems];
@@ -75,19 +80,28 @@ export default function PlayScreen() {
       updatedItems[index] = undefined;
       return updatedItems
     })
+  }, [])
+
+  const getColor = useCallback((textColor: boolean = false) => {
+    if(reponse.length === word.length && !reponse.includes(undefined)) {
+      if(reponse.map(letter => letter?.letter).join('') === word) {
+        return Colors.response.success;
+      } else {
+        return Colors.response.fail;
+      }
+    }
+    return textColor ? Colors.response.letter : Colors.response.blurDefault;
+  }, [reponse, word])
+
+  function checkForWin() {
+    if(reponse.map(letter => letter?.letter).join('') === word) {
+      setTimeout(() => {resetGame()}, 1000);
+    }
   }
 
   return (
-      <View style={{
-          height: '100%',
-          width: '100%',
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 16,
-        }}
-      >
-        
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
+      <View style={styles.screen}>
+        <View style={styles.gridImage}>
           {loading ? 
             <ActivityIndicator size="large" color="#FFFFFF" /> 
             : images.map((image, index) => (
@@ -96,9 +110,14 @@ export default function PlayScreen() {
           }
         </View>
 
-        <View style={styles.containerAnswer}>
+        <View style={[styles.containerAnswer, {shadowColor: getColor()}]}>
           {word.split('').map((letter, index) => (
-            <CellResponse key={index} letter={reponse.length >= index + 1 ? reponse[index] : undefined} onPress={() => removeLetterToReponse(index, reponse[index])} />
+            <CellResponse 
+              key={index} 
+              letter={reponse.length >= index + 1 ? reponse[index] : undefined} 
+              onPress={() => removeLetterToReponse(index, reponse[index])}
+              color={getColor(true)}
+            />
           ))}
         </View>
 
@@ -115,9 +134,20 @@ export default function PlayScreen() {
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    height: '100%',
+    width: '100%',
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+  },
+  gridImage: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   containerAnswer: {
-    flexDirection: 'row', 
-    marginTop: 48,
+    flexDirection: 'row',
     shadowColor: '#4A6AB2',
     shadowRadius: 12,
     shadowOpacity: 1,

@@ -2,6 +2,7 @@ import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 import { View, StyleSheet, Image } from 'react-native';
+import Colors from '../constants/Colors';
 
 interface CardImageProps {
   image: string
@@ -25,8 +26,9 @@ const styles = StyleSheet.create({
     height: 160, 
     margin: 5, 
     borderRadius: 8, 
-    borderWidth: 8, 
-    borderColor: "#4B4E5530"
+    borderWidth: 8,
+    backgroundColor: Colors.cardImage.background,
+    borderColor: Colors.cardImage.background
   },
   image:{
     flex: 1,
