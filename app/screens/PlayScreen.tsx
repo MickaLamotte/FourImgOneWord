@@ -3,7 +3,7 @@ import { CardImage } from "../components/CardImage";
 import { CellResponse } from "../components/CellResponse";
 import { CellLetter } from "../components/CellLetter";
 import { ButtonValidation } from "../components/ButtonValidation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import usePexels from "../services/usePexels";
 import useRando from "../services/useRando";
 import Colors from "../constants/Colors";
@@ -21,12 +21,13 @@ export default function PlayScreen() {
 
   const { word = '', loading: loadingWord, error: errorWord, fetchWord } = useRando();
   const { images, loading: loadingImage, error } = usePexels(word);
+
   const [ reponse, setReponse ]= useState<(Letter | undefined)[]>([]);
   const [ loading, setLoading ]= useState<boolean>(false);
 
   const [ propositionLetter, setPropositionLetter ] = useState<Letter[]>([]);
 
-  var retryAPI: number = 0
+  const retryAPI = useRef(0)
 
   useEffect(() => {
     const randomLetters = getRandomLetters(12 - word.length);
@@ -44,11 +45,11 @@ export default function PlayScreen() {
   }, [reponse])
 
   useEffect(() => {
-    if(images.includes("") && retryAPI < MAX_SECURE_RETRY) {
-      retryAPI++
+    if(images.includes("") && retryAPI.current < MAX_SECURE_RETRY) {
+      retryAPI.current += 1;
       fetchWord()
     } else {
-      retryAPI = 0;
+      retryAPI.current = 0;
       setLoading(false);
     }
   }, [images])
