@@ -20,7 +20,8 @@ const usePexels = (word: string) => {
       if(!response.ok) { throw new Error('Erreur lors du chargement des images') }
   
       const data = await response.json();
-      const imagesList = data.photos.map((photo: any) => photo.src.medium);
+      const imagesList = data.photos.map((photo: any) => photo.src.medium).concat(Array(4 - data.photos.length).fill(""));
+      console.log(imagesList)
 
       setImages(imagesList);
 

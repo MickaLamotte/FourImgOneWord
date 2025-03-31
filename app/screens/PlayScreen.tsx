@@ -44,7 +44,7 @@ export default function PlayScreen() {
   }, [reponse])
 
   useEffect(() => {
-    if(images.length < 4 && retryAPI < MAX_SECURE_RETRY) {
+    if(images.includes("") && retryAPI < MAX_SECURE_RETRY) {
       retryAPI++
       fetchWord()
     } else {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    elevation: 3
+    elevation: 10
   },
   row: {
     flexDirection: 'row'
