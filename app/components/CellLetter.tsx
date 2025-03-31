@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   letter: {
-    fontSize: 40, 
-    lineHeight: 45,
+    fontSize: 34, 
+    lineHeight: 38,
     color: Colors.letterToPick.letter, 
     fontWeight: 'bold',
     shadowColor: 'white',

@@ -11,7 +11,7 @@ const Colors = {
     letter: '#000000',
     background: '#FFFFFF',
     background2: '#D7D7D7',
-    disable: '#5B5B5B80'
+    disable: '#4A6AB240'
   },
   response: {
     letter: '#FFFFFF',

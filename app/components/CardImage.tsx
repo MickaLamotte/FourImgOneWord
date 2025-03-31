@@ -3,6 +3,7 @@ import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 import { View, StyleSheet, Image } from 'react-native';
 import Colors from '../constants/Colors';
+import { Size } from '../constants/Size';
 
 interface CardImageProps {
   image: string
@@ -22,8 +23,8 @@ export function CardImage(props: CardImageProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 160, 
-    height: 160, 
+    width: Size.image, 
+    height: Size.image, 
     margin: 5, 
     borderRadius: 8, 
     borderWidth: 8,
